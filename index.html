@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,39 +12,93 @@
       background: #f8f9fa;
       color: #333;
     }
+
     header {
       background: #ff6600;
       color: white;
       padding: 1.5rem;
       text-align: center;
+      position: relative;
     }
+
     header h1 {
       margin: 0;
-      font-size: 2rem;
+      font-size: 2.5rem;
     }
+
     header p {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
     }
+
+    #lang-toggle {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: white;
+      color: #ff6600;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
     section {
-      max-width: 800px;
+      max-width: 1000px;
       margin: auto;
       padding: 2rem;
       line-height: 1.6;
     }
-    .highlight {
+
+    h2 {
       color: #ff6600;
-      font-weight: bold;
+      margin-bottom: 0.5rem;
     }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .service-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .service-card h3 {
+      margin-top: 0;
+      color: #ff6600;
+    }
+
+    .benefits {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      margin-top: 2rem;
+    }
+
+    .benefits ul {
+      padding-left: 20px;
+    }
+
     .contact-box {
       background: white;
       padding: 1.5rem;
-      margin-top: 1.5rem;
+      margin-top: 2rem;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
-    .contact-box p {
-      margin: 0.5rem 0;
-    }
+
     footer {
       background: #333;
       color: white;
@@ -52,40 +107,162 @@
       margin-top: 2rem;
       font-size: 0.9rem;
     }
+
     a {
       color: #ff6600;
       text-decoration: none;
     }
   </style>
 </head>
+
 <body>
 
   <header>
-    <h1>TrendSpark</h1>
-    <p>আপনার স্থানীয় ডিজিটাল বিজ্ঞাপনের সঙ্গী</p>
+    <h1 id="title">TrendSpark</h1>
+    <p id="subtitle">আপনার স্থানীয় ডিজিটাল বিজ্ঞাপনের সঙ্গী</p>
+    <button id="lang-toggle">EN</button>
   </header>
 
   <section>
-    <h2>আপনার ব্যবসার বৃদ্ধি করুন</h2>
-    <p>
-      <span class="highlight">TrendSpark</span> এ আমরা <strong>স্থানীয় ব্যবসার জন্য ডিজিটাল বিজ্ঞাপনের সমাধান</strong> প্রদান করি।
-      আমরা আপনার ব্যবসাকে <strong>YouTube, Facebook, Instagram</strong>-এ আপনার এলাকার মানুষের কাছে পৌঁছে দিই।
-    </p>
-    <p>
-      দোকান, পরিষেবা বা ইভেন্ট — যাই হোক না কেন, আমাদের টার্গেটেড বিজ্ঞাপন আপনার পরিচিতি বাড়াবে এবং আপনার স্থানীয় গ্রাহকদের সাথে যুক্ত করবে।
+    <h2 id="section-title">আপনার ব্যবসার বৃদ্ধি করুন</h2>
+    <p id="intro">
+      <strong>TrendSpark</strong> এ আমরা <strong>সম্পূর্ণ ডিজিটাল মার্কেটিং ও ওয়েব সলিউশন</strong> প্রদান করি।
+      আপনার ব্যবসাকে <strong>YouTube, Facebook, Instagram</strong> সহ বিভিন্ন অনলাইন প্ল্যাটফর্মে প্রচার করে আপনার
+      এলাকার গ্রাহকদের কাছে পৌঁছে দিই।
     </p>
 
+    <div class="services" id="services">
+      <!-- Service cards will be populated by JS -->
+    </div>
+
+    <div class="benefits">
+      <h2 id="benefit-title">কেন TrendSpark বেছে নেবেন?</h2>
+      <ul id="benefit-list">
+        <!-- Benefits will be populated by JS -->
+      </ul>
+    </div>
+
     <div class="contact-box">
-      <h3>📞 যোগাযোগ করুন</h3>
-      <p><strong>ফোন:</strong> <a href="tel:+916297070892">+91 62970 70892</a></p>
-      <p><strong>ইমেল:</strong> <a href="mailto:trendspark001@gmail.com">trendspark001@gmail.com</a></p>
-      <p><em>চলুন, আপনার ব্যবসার বৃদ্ধি ঘটাই এবং আপনার এলাকার মানুষের কাছে পৌঁছে যাই!</em></p>
+      <h3 id="contact-heading">📞 যোগাযোগ করুন</h3>
+      <p><strong id="phone-label">ফোন:</strong> <a href="tel:+916297070892">+91 62970 70892</a></p>
+      <p><strong id="email-label">ইমেল:</strong> <a href="mailto:trendspark001@gmail.com">trendspark001@gmail.com</a>
+      </p>
+      <p id="cta"><em>চলুন, আপনার ব্যবসার বৃদ্ধি ঘটাই এবং আপনার এলাকার মানুষের কাছে পৌঁছে যাই!</em></p>
     </div>
   </section>
 
   <footer>
-    &copy; 2025 TrendSpark. সর্বস্বত্ব সংরক্ষিত।
+    &copy; 2025 TrendSpark. <span id="rights">সর্বস্বত্ব সংরক্ষিত।</span>
   </footer>
 
+  <script>
+    const servicesData = {
+      bn: [
+        { title: "🎯 সোশ্যাল মিডিয়া বিজ্ঞাপন", desc: "YouTube, Facebook, Instagram-এ টার্গেটেড বিজ্ঞাপন তৈরি করে আপনার ব্র্যান্ডকে পৌঁছে দিই সঠিক গ্রাহকের কাছে।" },
+        { title: "🌐 ওয়েবসাইট ডেভেলপমেন্ট", desc: "পেশাদার ও মোবাইল-ফ্রেন্ডলি ওয়েবসাইট তৈরি যা আপনার ব্যবসাকে অনলাইনে শক্তিশালীভাবে উপস্থাপন করবে।" },
+        { title: "🛒 ই-কমার্স সলিউশন", desc: "অনলাইনে পণ্য বিক্রির জন্য নিরাপদ ও আকর্ষণীয় ই-কমার্স প্ল্যাটফর্ম তৈরি করি।" },
+        { title: "📈 SEO ও Google Ads", desc: "আপনার ওয়েবসাইটকে গুগলে শীর্ষে আনতে সার্চ ইঞ্জিন অপটিমাইজেশন ও গুগল বিজ্ঞাপন ক্যাম্পেইন।" },
+        { title: "✉️ ইমেল মার্কেটিং", desc: "গ্রাহকদের সাথে নিয়মিত যোগাযোগ রাখতে প্রফেশনাল ইমেল ক্যাম্পেইন পরিচালনা।" },
+        { title: "📊 ব্র্যান্ড কনসালটিং", desc: "ব্র্যান্ড আইডেন্টিটি, কনটেন্ট প্ল্যানিং ও ডিজিটাল স্ট্র্যাটেজি নিয়ে পেশাদার পরামর্শ।" }
+      ],
+      en: [
+        { title: "🎯 Social Media Advertising", desc: "Create targeted ads on YouTube, Facebook, and Instagram to reach the right audience." },
+        { title: "🌐 Website Development", desc: "Build professional, mobile-friendly websites to represent your business online." },
+        { title: "🛒 E-Commerce Solutions", desc: "Create secure and attractive e-commerce platforms for online selling." },
+        { title: "📈 SEO & Google Ads", desc: "Boost your site's ranking on Google with SEO and Google Ads campaigns." },
+        { title: "✉️ Email Marketing", desc: "Run professional email campaigns to keep in touch with your customers." },
+        { title: "📊 Brand Consulting", desc: "Get expert advice on brand identity, content planning, and digital strategy." }
+      ]
+    };
+
+    const benefitsData = {
+      bn: [
+        "📌 আপনার টার্গেট অডিয়েন্স অনুযায়ী কাস্টম বিজ্ঞাপন পরিকল্পনা",
+        "💡 ক্রিয়েটিভ ও ডেটা-ড্রিভেন মার্কেটিং অ্যাপ্রোচ",
+        "🚀 দ্রুত রেজাল্ট ও পরিমাপযোগ্য সাফল্য",
+        "🤝 গ্রাহক-বান্ধব সাপোর্ট ও সার্ভিস"
+      ],
+      en: [
+        "📌 Custom ad plans tailored to your target audience",
+        "💡 Creative and data-driven marketing approach",
+        "🚀 Fast results with measurable success",
+        "🤝 Customer-friendly support and service"
+      ]
+    };
+
+    let currentLang = "bn";
+
+    function renderServices() {
+      const container = document.getElementById("services");
+      container.innerHTML = "";
+      servicesData[currentLang].forEach(s => {
+        const card = document.createElement("div");
+        card.className = "service-card";
+        card.innerHTML = `<h3>${s.title}</h3><p>${s.desc}</p>`;
+        container.appendChild(card);
+      });
+    }
+
+    function renderBenefits() {
+      const list = document.getElementById("benefit-list");
+      list.innerHTML = "";
+      benefitsData[currentLang].forEach(b => {
+        const li = document.createElement("li");
+        li.textContent = b;
+        list.appendChild(li);
+      });
+    }
+
+    function switchLang() {
+      currentLang = currentLang === "bn" ? "en" : "bn";
+      document.getElementById("lang-toggle").textContent = currentLang === "bn" ? "EN" : "BN";
+
+      const text = {
+        bn: {
+          subtitle: "আপনার স্থানীয় ডিজিটাল বিজ্ঞাপনের সঙ্গী",
+          sectionTitle: "আপনার ব্যবসার বৃদ্ধি করুন",
+          intro: "TrendSpark এ আমরা সম্পূর্ণ ডিজিটাল মার্কেটিং ও ওয়েব সলিউশন প্রদান করি। আপনার ব্যবসাকে YouTube, Facebook, Instagram সহ বিভিন্ন অনলাইন প্ল্যাটফর্মে প্রচার করে আপনার এলাকার গ্রাহকদের কাছে পৌঁছে দিই।",
+          benefitTitle: "কেন TrendSpark বেছে নেবেন?",
+          contactHeading: "📞 যোগাযোগ করুন",
+          phoneLabel: "ফোন:",
+          emailLabel: "ইমেল:",
+          cta: "চলুন, আপনার ব্যবসার বৃদ্ধি ঘটাই এবং আপনার এলাকার মানুষের কাছে পৌঁছে যাই!",
+          rights: "সর্বস্বত্ব সংরক্ষিত।"
+        },
+        en: {
+          subtitle: "Your Local Digital Advertising Partner",
+          sectionTitle: "Grow Your Business",
+          intro: "At TrendSpark, we provide complete digital marketing and web solutions. We promote your business on platforms like YouTube, Facebook, and Instagram to reach customers in your local area.",
+          benefitTitle: "Why Choose TrendSpark?",
+          contactHeading: "📞 Contact Us",
+          phoneLabel: "Phone:",
+          emailLabel: "Email:",
+          cta: "Let's grow your business and reach your local customers!",
+          rights: "All rights reserved."
+        }
+      };
+
+      document.getElementById("subtitle").textContent = text[currentLang].subtitle;
+      document.getElementById("section-title").textContent = text[currentLang].sectionTitle;
+      document.getElementById("intro").textContent = text[currentLang].intro;
+      document.getElementById("benefit-title").textContent = text[currentLang].benefitTitle;
+      document.getElementById("contact-heading").textContent = text[currentLang].contactHeading;
+      document.getElementById("phone-label").textContent = text[currentLang].phoneLabel;
+      document.getElementById("email-label").textContent = text[currentLang].emailLabel;
+      document.getElementById("cta").textContent = text[currentLang].cta;
+      document.getElementById("rights").textContent = text[currentLang].rights;
+
+      renderServices();
+      renderBenefits();
+    }
+
+    document.getElementById("lang-toggle").addEventListener("click", switchLang);
+
+    // Initial render
+    renderServices();
+    renderBenefits();
+  </script>
+
 </body>
+
 </html>
