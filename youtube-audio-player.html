@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Audio Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .player {
+      text-align: center;
+    }
+    #video {
+      display: none; /* Hide the video, keep only audio */
+    }
+    button {
+      background: #1db954;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #17a44d;
+    }
+  </style>
+</head>
+<body>
+  <div class="player">
+    <h2>🎵 YouTube Audio Player</h2>
+    <div id="video"></div>
+    <button id="playBtn">Play</button>
+    <button id="pauseBtn">Pause</button>
+  </div>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    let player;
+
+    // Load YouTube video as hidden
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player("video", {
+        height: "0",
+        width: "0",
+        videoId: "jNQXAC9IVRw", // ⬅️ Replace with your YouTube Video ID
+        playerVars: { autoplay: 0 },
+        events: {
+          onReady: onPlayerReady,
+        },
+      });
+    }
+
+    function onPlayerReady() {
+      document.getElementById("playBtn").addEventListener("click", () => {
+        player.playVideo();
+      });
+
+      document.getElementById("pauseBtn").addEventListener("click", () => {
+        player.pauseVideo();
+      });
+    }
+  </script>
+</body>
+</html>
