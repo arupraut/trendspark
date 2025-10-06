@@ -3,27 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YouTube Audio Player</title>
+  <title>YouTube Audio Player with Playlist</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background: #111;
       color: #fff;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       height: 100vh;
     }
 
-    .player {
+    /* Sidebar Playlist */
+    .playlist {
+      width: 250px;
+      background: #1a1a1a;
+      overflow-y: auto;
+      border-right: 2px solid #222;
+      padding: 10px;
+    }
+
+    .playlist h3 {
       text-align: center;
-      width: 90%;
-      max-width: 400px;
+      color: #1db954;
+    }
+
+    .song {
+      padding: 10px;
+      margin: 5px 0;
+      cursor: pointer;
+      border-radius: 5px;
+      background: #222;
+      transition: background 0.3s;
+    }
+
+    .song:hover {
+      background: #333;
+    }
+
+    .song.active {
+      background: #1db954;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    /* Player Section */
+    .player {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
     }
 
     #video {
-      display: none; /* hide video, only audio */
+      display: none;
     }
 
     button {
@@ -41,12 +77,8 @@
       background: #17a44d;
     }
 
-    .controls {
-      margin-top: 15px;
-    }
-
     .progress-container {
-      width: 100%;
+      width: 80%;
       background: #333;
       height: 6px;
       border-radius: 3px;
@@ -71,16 +103,26 @@
     }
 
     input[type="range"] {
-      width: 100px;
+      width: 120px;
     }
   </style>
 </head>
 <body>
+  <!-- Sidebar Playlist -->
+  <div class="playlist" id="playlist">
+    <h3>🎶 Playlist</h3>
+    <div class="song" data-id="YgmLGhR-r4U">Kali Puja Theme</div>
+    <div class="song" data-id="jNQXAC9IVRw">Sample Track</div>
+    <div class="song" data-id="3JZ_D3ELwOQ">Charlie Puth - Attention</div>
+    <div class="song" data-id="CevxZvSJLk8">Katy Perry - Roar</div>
+  </div>
+
+  <!-- Main Player -->
   <div class="player">
-    <h2>🎧 YouTube Audio Player</h2>
+    <h2 id="currentTitle">🎧 Now Playing: Kali Puja Theme</h2>
     <div id="video"></div>
 
-    <div class="controls">
+    <div>
       <button id="playBtn">▶️ Play</button>
       <button id="pauseBtn">⏸️ Pause</button>
     </div>
@@ -101,12 +143,14 @@
     let player;
     let progressInterval;
     let isDragging = false;
+    let currentSongId = "YgmLGhR-r4U"; // default
+    let currentTitle = document.getElementById("currentTitle");
 
     function onYouTubeIframeAPIReady() {
       player = new YT.Player("video", {
         height: "0",
         width: "0",
-        videoId: "YgmLGhR-r4U", // ⬅️ Replace with your YouTube video ID
+        videoId: currentSongId,
         playerVars: { autoplay: 0 },
         events: { onReady: onPlayerReady },
       });
@@ -118,6 +162,23 @@
       const progressContainer = document.getElementById("progressContainer");
       const progress = document.getElementById("progress");
       const volumeSlider = document.getElementById("volume");
+      const playlist = document.getElementById("playlist");
+      const songs = playlist.querySelectorAll(".song");
+
+      // Highlight default song
+      highlightCurrent(currentSongId);
+
+      // Play selected song
+      songs.forEach(song => {
+        song.addEventListener("click", () => {
+          const videoId = song.getAttribute("data-id");
+          const title = song.textContent;
+          currentSongId = videoId;
+          currentTitle.textContent = `🎧 Now Playing: ${title}`;
+          highlightCurrent(videoId);
+          player.loadVideoById(videoId);
+        });
+      });
 
       playBtn.addEventListener("click", () => {
         player.playVideo();
@@ -147,18 +208,12 @@
         clearInterval(progressInterval);
       }
 
-      // Drag/Seek functionality
+      // Seek/drag
       progressContainer.addEventListener("mousedown", (e) => {
         isDragging = true;
         updateProgress(e);
       });
-
-      document.addEventListener("mouseup", () => {
-        if (isDragging) {
-          isDragging = false;
-        }
-      });
-
+      document.addEventListener("mouseup", () => (isDragging = false));
       progressContainer.addEventListener("mousemove", (e) => {
         if (isDragging) updateProgress(e);
       });
@@ -173,11 +228,17 @@
 
       // Volume control
       volumeSlider.addEventListener("input", (e) => {
-        const volume = e.target.value;
-        player.setVolume(volume);
+        player.setVolume(e.target.value);
       });
 
       player.setVolume(volumeSlider.value);
+
+      // Helper: highlight current song
+      function highlightCurrent(videoId) {
+        songs.forEach(s => s.classList.remove("active"));
+        const activeSong = Array.from(songs).find(s => s.getAttribute("data-id") === videoId);
+        if (activeSong) activeSong.classList.add("active");
+      }
     }
   </script>
 </body>
