@@ -15,12 +15,17 @@
       justify-content: center;
       height: 100vh;
     }
+
     .player {
       text-align: center;
+      width: 90%;
+      max-width: 400px;
     }
+
     #video {
-      display: none; /* Hide the video, keep only audio */
+      display: none; /* hide video, only audio */
     }
+
     button {
       background: #1db954;
       border: none;
@@ -31,45 +36,148 @@
       cursor: pointer;
       font-size: 16px;
     }
+
     button:hover {
       background: #17a44d;
+    }
+
+    .controls {
+      margin-top: 15px;
+    }
+
+    .progress-container {
+      width: 100%;
+      background: #333;
+      height: 6px;
+      border-radius: 3px;
+      margin: 20px 0;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .progress {
+      background: #1db954;
+      height: 100%;
+      width: 0%;
+      border-radius: 3px;
+      transition: width 0.1s linear;
+    }
+
+    .volume-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    input[type="range"] {
+      width: 100px;
     }
   </style>
 </head>
 <body>
   <div class="player">
-    <h2>🎵 YouTube Audio Player</h2>
+    <h2>🎧 YouTube Audio Player</h2>
     <div id="video"></div>
-    <button id="playBtn">Play</button>
-    <button id="pauseBtn">Pause</button>
+
+    <div class="controls">
+      <button id="playBtn">▶️ Play</button>
+      <button id="pauseBtn">⏸️ Pause</button>
+    </div>
+
+    <div class="progress-container" id="progressContainer">
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <div class="volume-container">
+      <label for="volume">🔊</label>
+      <input type="range" id="volume" min="0" max="100" value="50">
+    </div>
   </div>
 
   <!-- YouTube IFrame API -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let player;
+    let progressInterval;
+    let isDragging = false;
 
-    // Load YouTube video as hidden
     function onYouTubeIframeAPIReady() {
       player = new YT.Player("video", {
         height: "0",
         width: "0",
-        videoId: "YgmLGhR-r4U", // ⬅️ Replace with your YouTube Video ID
+        videoId: "jNQXAC9IVRw", // ⬅️ Replace with your YouTube video ID
         playerVars: { autoplay: 0 },
-        events: {
-          onReady: onPlayerReady,
-        },
+        events: { onReady: onPlayerReady },
       });
     }
 
     function onPlayerReady() {
-      document.getElementById("playBtn").addEventListener("click", () => {
+      const playBtn = document.getElementById("playBtn");
+      const pauseBtn = document.getElementById("pauseBtn");
+      const progressContainer = document.getElementById("progressContainer");
+      const progress = document.getElementById("progress");
+      const volumeSlider = document.getElementById("volume");
+
+      playBtn.addEventListener("click", () => {
         player.playVideo();
+        startProgressTracking();
       });
 
-      document.getElementById("pauseBtn").addEventListener("click", () => {
+      pauseBtn.addEventListener("click", () => {
         player.pauseVideo();
+        stopProgressTracking();
       });
+
+      // Progress tracking
+      function startProgressTracking() {
+        clearInterval(progressInterval);
+        progressInterval = setInterval(() => {
+          if (player && player.getDuration) {
+            const duration = player.getDuration();
+            const current = player.getCurrentTime();
+            if (!isDragging && duration > 0) {
+              progress.style.width = (current / duration) * 100 + "%";
+            }
+          }
+        }, 500);
+      }
+
+      function stopProgressTracking() {
+        clearInterval(progressInterval);
+      }
+
+      // Drag/Seek functionality
+      progressContainer.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        updateProgress(e);
+      });
+
+      document.addEventListener("mouseup", () => {
+        if (isDragging) {
+          isDragging = false;
+        }
+      });
+
+      progressContainer.addEventListener("mousemove", (e) => {
+        if (isDragging) updateProgress(e);
+      });
+
+      function updateProgress(e) {
+        const rect = progressContainer.getBoundingClientRect();
+        const percent = Math.min(Math.max(0, e.clientX - rect.left), rect.width) / rect.width;
+        progress.style.width = percent * 100 + "%";
+        const newTime = percent * player.getDuration();
+        player.seekTo(newTime, true);
+      }
+
+      // Volume control
+      volumeSlider.addEventListener("input", (e) => {
+        const volume = e.target.value;
+        player.setVolume(volume);
+      });
+
+      player.setVolume(volumeSlider.value);
     }
   </script>
 </body>
